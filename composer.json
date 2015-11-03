@@ -49,6 +49,7 @@
         "zendframework/zend-mail": "2.1.5",
         "a2lix/translation-form-bundle": "1.3",
         "mtdowling/cron-expression": "1.0.*",
+        "composer/composer": "1.0.*@dev",
         "jdare/clank-bundle": "0.1.*",
         "guzzle/guzzle": "3.7.*",
         "lexik/maintenance-bundle": "v1.0.3",
@@ -71,7 +72,6 @@
         "oro/moment-timezone": "0.3.*"
     },
     "require-dev": {
-        "composer/composer": "1.0.*@dev",
         "sensio/generator-bundle": "2.5.3"
     },
     "minimum-stability": "dev",
