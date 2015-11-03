@@ -59,7 +59,6 @@
         "guzzle/guzzle": "3.7.*",
         "lexik/maintenance-bundle": "v1.0.3",
         "sylius/flow-bundle": "0.6.*",
-        "composer/composer": "1.0.*@dev",
         "akeneo/batch-bundle": "0.4.2",
         "nesbot/Carbon": "1.8.*",
         "monolog/monolog": "1.8.*",
@@ -78,6 +77,7 @@
         "oro/moment-timezone": "0.3.*"
     },
     "require-dev": {
+        "composer/composer": "1.0.*@dev",
         "sensio/generator-bundle": "2.5.3"
     },
     "minimum-stability": "dev",
