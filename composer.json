@@ -1,5 +1,5 @@
 {
-    "name": "imilyukov/oro-platform",
+    "name": "oro/platform",
     "description": "Business Application Platform (BAP)",
     "homepage": "https://github.com/orocrm/platform.git",
     "license": "MIT",
@@ -7,12 +7,6 @@
         {
             "name": "Oro, Inc",
             "homepage": "http://www.orocrm.com"
-        }
-    ],
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "http://packagist.orocrm.com"
         }
     ],
     "require": {
