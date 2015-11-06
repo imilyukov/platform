@@ -11,8 +11,8 @@
     ],
     "repositories": [
         {
-            "type": "composer",
-            "url": "http://packagist.orocrm.com"
+            "type": "vcs",
+            "url": "git@github.com:orocrm/composer.git"
         }
     ],
     "require": {
