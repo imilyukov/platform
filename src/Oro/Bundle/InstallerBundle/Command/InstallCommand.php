@@ -523,7 +523,7 @@ class InstallCommand extends AbstractCommand implements InstallCommandInterface
                 array(
                     '--process-isolation' => true,
                     '--target'            => sprintf(
-                        '%s/../%s/js/fos_js_routes.js',
+                        '%s/../%s/js/routes.js',
                         $this->getContainer()->getParameter('kernel.root_dir'),
                         $input->getOption('target')
                     ),
