@@ -41,6 +41,8 @@ class InstallCommand extends AbstractCommand implements InstallCommandInterface
             ->addOption('user-password', null, InputOption::VALUE_OPTIONAL, 'User password')
             ->addOption('force', null, InputOption::VALUE_NONE, 'Force installation')
             ->addOption('symlink', null, InputOption::VALUE_NONE, 'Symlinks the assets instead of copying it')
+            ->addOption('relative', null, InputOption::VALUE_NONE, 'Make relative symlinks')
+            ->addOption('target', null, InputOption::VALUE_OPTIONAL, 'The assets target directory', 'web')
             ->addOption(
                 'sample-data',
                 null,
@@ -499,10 +501,14 @@ class InstallCommand extends AbstractCommand implements InstallCommandInterface
         $output->writeln('<info>Preparing application.</info>');
 
         $assetsOptions = array(
-            '--exclude' => array('OroInstallerBundle')
+            'target'    => $input->getOption('target'),
+            '--exclude' => array('OroInstallerBundle'),
         );
         if ($input->hasOption('symlink') && $input->getOption('symlink')) {
             $assetsOptions['--symlink'] = true;
+        }
+        if ($input->hasOption('relative') && $input->getOption('relative')) {
+            $assetsOptions['--relative'] = true;
         }
 
         $commandExecutor
@@ -516,9 +522,19 @@ class InstallCommand extends AbstractCommand implements InstallCommandInterface
                 'fos:js-routing:dump',
                 array(
                     '--process-isolation' => true,
+                    '--target'            => sprintf(
+                        '%s/../%s/js/fos_js_routes.js',
+                        $this->getContainer()->getParameter('kernel.root_dir'),
+                        $input->getOption('target')
+                    ),
                 )
             )
-            ->runCommand('oro:localization:dump')
+            ->runCommand(
+                'oro:localization:dump',
+                array(
+                    'target' => $input->getOption('target')
+                )
+            )
             ->runCommand(
                 'oro:assets:install',
                 $assetsOptions
