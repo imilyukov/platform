@@ -112,6 +112,10 @@ class BusinessUnitType extends AbstractType
                 ]
             )
             ->add(
+                'workSchedule',
+                'my_discounts_work_schedule_schedule'
+            )
+            ->add(
                 'removeUsers',
                 'oro_entity_identifier',
                 [

@@ -75,6 +75,7 @@ class OroOrganizationBundleInstaller implements Installation
         $table->addColumn('website', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('email', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('fax', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('work_schedule', 'json_array', ['notnull' => false]);
         $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addColumn('updated_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addIndex(['organization_id'], 'idx_c033b2d532c8a3de', []);

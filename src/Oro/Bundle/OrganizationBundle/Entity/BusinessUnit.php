@@ -5,6 +5,8 @@ namespace Oro\Bundle\OrganizationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use MyDiscounts\WorkScheduleBundle\Model\ScheduleInterface;
+use MyDiscounts\WorkScheduleBundle\Work\Schedule;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\NotificationBundle\Entity\NotificationEmailInterface;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -114,6 +116,12 @@ class BusinessUnit implements NotificationEmailInterface, EmailHolderInterface, 
     protected $fax;
 
     /**
+     * @var ScheduleInterface
+     * @ORM\Column(name="work_schedule", type="json_array")
+     */
+    protected $workSchedule;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -157,6 +165,11 @@ class BusinessUnit implements NotificationEmailInterface, EmailHolderInterface, 
      * @ORM\JoinColumn(name="business_unit_owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $owner;
+
+    public function __construct()
+    {
+
+    }
 
     /**
      * Get id
@@ -304,6 +317,27 @@ class BusinessUnit implements NotificationEmailInterface, EmailHolderInterface, 
     public function getFax()
     {
         return $this->fax;
+    }
+
+    /**
+     * @return ScheduleInterface
+     */
+    public function getWorkSchedule()
+    {
+        if (!$this->workSchedule) {
+            $this->workSchedule = new Schedule();
+        } else if (is_array($this->workSchedule)) {
+            $this->workSchedule = new Schedule($this->workSchedule);
+        }
+        return $this->workSchedule;
+    }
+
+    /**
+     * @param ScheduleInterface $workSchedule
+     */
+    public function setWorkSchedule(ScheduleInterface $workSchedule)
+    {
+        $this->workSchedule = $workSchedule;
     }
 
     /**

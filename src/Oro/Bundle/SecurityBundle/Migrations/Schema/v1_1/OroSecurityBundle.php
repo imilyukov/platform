@@ -30,14 +30,18 @@ class OroSecurityBundle implements Migration
         // remove platform-depended sql parts, for example "ON UPDATE CASCADE" for MySql
         $aclEntriesTable = $schema->getTable('acl_entries');
         // additional column, which duplicates acl_object_identities.object_identifier field.
-        $aclEntriesTable->addColumn(
-            'record_id',
-            'bigint',
-            [
-                'unsigned' => true,
-                'notnull' => false,
-            ]
-        );
+
+        if (!$aclEntriesTable->hasColumn('record_id')) {
+            $aclEntriesTable->addColumn(
+                'record_id',
+                'bigint',
+                [
+                    'unsigned' => true,
+                    'notnull' => false,
+                ]
+            );
+        }
+
         $aclEntriesTable->removeForeignKey('FK_46C8B806DF9183C9');
         $aclEntriesTable->addForeignKeyConstraint(
             $schema->getTable('acl_security_identities'),
