@@ -28,6 +28,7 @@ class OroOrganizationBundleInstaller implements Installation
         /** Tables generation **/
         $this->createOroOrganizationTable($schema);
         $this->createOroBusinessUnitTable($schema);
+        $this->createOroBusinessUnitAttributeTable($schema);
 
         /** Foreign keys generation **/
         $this->addOroBusinessUnitForeignKeys($schema);
@@ -70,17 +71,27 @@ class OroOrganizationBundleInstaller implements Installation
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('business_unit_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('organization_id', 'integer', []);
+        $table->addColumn('model_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('phone', 'string', ['notnull' => false, 'length' => 100]);
         $table->addColumn('website', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('email', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('fax', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('work_schedule', 'json_array', ['notnull' => false]);
         $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addColumn('updated_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addIndex(['organization_id'], 'idx_c033b2d532c8a3de', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['business_unit_owner_id'], 'idx_c033b2d559294170', []);
+    }
+
+    protected function createOroBusinessUnitAttributeTable(Schema $schema)
+    {
+        $table = $schema->createTable('oro_business_unit_attribute');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('business_unit_id', 'integer', ['notnull' => true]);
+        $table->addColumn('attribute_id', 'integer', ['notnull' => true]);
+        $table->addColumn('value', 'text', ['notnull' => false]);
+        $table->setPrimaryKey(['id']);
     }
 
     /**

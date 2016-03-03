@@ -5,8 +5,8 @@ namespace Oro\Bundle\OrganizationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use MyDiscounts\WorkScheduleBundle\Model\ScheduleInterface;
-use MyDiscounts\WorkScheduleBundle\Work\Schedule;
+use IMilyukov\EavSchemaBundle\Entity\EavSubject;
+use IMilyukov\EavSchemaBundle\Model\EavAttributeInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\NotificationBundle\Entity\NotificationEmailInterface;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -49,7 +49,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  *      }
  * )
  */
-class BusinessUnit implements NotificationEmailInterface, EmailHolderInterface, BusinessUnitInterface
+class BusinessUnit extends EavSubject implements NotificationEmailInterface, EmailHolderInterface, BusinessUnitInterface
 {
     /**
      * @var integer
@@ -78,7 +78,7 @@ class BusinessUnit implements NotificationEmailInterface, EmailHolderInterface, 
     /**
      * @var Organization
      *
-     * @ORM\ManyToOne(targetEntity="Organization", inversedBy="businessUnits")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\OrganizationInterface", inversedBy="businessUnits")
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", nullable=false, onDelete="CASCADE")
      */
     protected $organization;
@@ -116,12 +116,6 @@ class BusinessUnit implements NotificationEmailInterface, EmailHolderInterface, 
     protected $fax;
 
     /**
-     * @var ScheduleInterface
-     * @ORM\Column(name="work_schedule", type="json_array")
-     */
-    protected $workSchedule;
-
-    /**
      * @var \DateTime
      *
      * @ORM\Column(name="created_at", type="datetime")
@@ -155,21 +149,27 @@ class BusinessUnit implements NotificationEmailInterface, EmailHolderInterface, 
     protected $tags;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Oro\Bundle\UserBundle\Entity\User", mappedBy="businessUnits")
+     * @ORM\ManyToMany(targetEntity="Oro\Bundle\UserBundle\Entity\UserInterface", mappedBy="businessUnits")
      */
     protected $users;
 
     /**
      * @var BusinessUnit
-     * @ORM\ManyToOne(targetEntity="BusinessUnit")
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\BusinessUnitInterface")
      * @ORM\JoinColumn(name="business_unit_owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $owner;
 
-    public function __construct()
-    {
-
-    }
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(
+     *      targetEntity="Oro\Bundle\OrganizationBundle\Entity\BusinessUnitAttributeInterface",
+     *      mappedBy="subject", fetch="EAGER", cascade={"persist", "remove"}
+     * )
+     * @ORM\OrderBy({"id" = "ASC"})
+     */
+    protected $attributes;
 
     /**
      * Get id
@@ -320,27 +320,6 @@ class BusinessUnit implements NotificationEmailInterface, EmailHolderInterface, 
     }
 
     /**
-     * @return ScheduleInterface
-     */
-    public function getWorkSchedule()
-    {
-        if (!$this->workSchedule) {
-            $this->workSchedule = new Schedule();
-        } else if (is_array($this->workSchedule)) {
-            $this->workSchedule = new Schedule($this->workSchedule);
-        }
-        return $this->workSchedule;
-    }
-
-    /**
-     * @param ScheduleInterface $workSchedule
-     */
-    public function setWorkSchedule(ScheduleInterface $workSchedule)
-    {
-        $this->workSchedule = $workSchedule;
-    }
-
-    /**
      * Get user created date/time
      *
      * @return \DateTime
@@ -469,5 +448,36 @@ class BusinessUnit implements NotificationEmailInterface, EmailHolderInterface, 
         $emails[] = $this->getEmail();
 
         return $emails;
+    }
+
+    /**
+     * @return BusinessUnitAttribute
+     */
+    public function createAttribute()
+    {
+        $attribute = new BusinessUnitAttribute();
+        $attribute->setSubject($this);
+
+        return $attribute;
+    }
+
+    /**
+     * @return EavAttributeInterface[]
+     */
+    public function getNewAttributes()
+    {
+        $model = $this->getModel();
+        if (!$model) {
+            return [];
+        }
+        $attributes = $this->getAttributes()->toArray();
+        $modelAttributes = $model->getAttributes()->toArray();
+        return array_udiff($modelAttributes, $attributes, function (EavAttributeInterface $attr, BusinessUnitAttributeInterface $battr) {
+            if ($attr->getSlug() == $battr->getSlug()) {
+                return 1;
+            } else {
+                return -1;
+            }
+        });
     }
 }

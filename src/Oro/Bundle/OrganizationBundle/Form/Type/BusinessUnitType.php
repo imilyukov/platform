@@ -2,6 +2,8 @@
 
 namespace Oro\Bundle\OrganizationBundle\Form\Type;
 
+use IMilyukov\EavSchemaBundle\Form\FormToTypeMapperInterface;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -23,15 +25,22 @@ class BusinessUnitType extends AbstractType
     protected $securityFacade;
 
     /**
+     * @var FormToTypeMapperInterface
+     */
+    protected $formToTypeMapper;
+
+    /**
      * @param BusinessUnitManager $businessUnitManager
      * @param SecurityFacade      $securityFacade
      */
     public function __construct(
         BusinessUnitManager $businessUnitManager,
-        SecurityFacade $securityFacade
+        SecurityFacade $securityFacade,
+        FormToTypeMapperInterface $formToTypeMapper
     ) {
         $this->businessUnitManager = $businessUnitManager;
         $this->securityFacade      = $securityFacade;
+        $this->formToTypeMapper = $formToTypeMapper;
     }
 
     /**
@@ -112,10 +121,6 @@ class BusinessUnitType extends AbstractType
                 ]
             )
             ->add(
-                'workSchedule',
-                'my_discounts_work_schedule_schedule'
-            )
-            ->add(
                 'removeUsers',
                 'oro_entity_identifier',
                 [
@@ -138,6 +143,51 @@ class BusinessUnitType extends AbstractType
         $data = $event->getData();
         if ($data) {
             if ($data->getId()) {
+
+                /** @var BusinessUnit $data */
+
+                $attributes = $data->getAttributes();
+
+                foreach ($attributes as $attribute) {
+                    $attributeType = $attribute->getType();
+                    $formTypes = $this->formToTypeMapper->getFormTypesByType($attributeType->getFieldType());
+
+                    if (!array_key_exists($attributeType->getFormType(), $formTypes)) {
+
+                        throw new ServiceNotFoundException($attributeType->getFormType());
+                    }
+
+                    $form->add(
+                        $attribute->getSlug(),
+                        $attributeType->getFormType(),
+                        array_merge($attribute->getOptions(), [
+                            'label'    => $attribute->getName(),
+                            'required' => $attribute->isRequired(),
+                        ])
+                    );
+                }
+
+                $newAttributes = $data->getNewAttributes();
+
+                foreach ($newAttributes as $attribute) {
+                    $attributeType = $attribute->getType();
+                    $formTypes = $this->formToTypeMapper->getFormTypesByType($attributeType->getFieldType());
+
+                    if (!array_key_exists($attributeType->getFormType(), $formTypes)) {
+
+                        throw new ServiceNotFoundException($attributeType->getFormType());
+                    }
+
+                    $form->add(
+                        $attribute->getSlug(),
+                        $attributeType->getFormType(),
+                        array_merge($attribute->getOptions(), [
+                            'label'    => $attribute->getName(),
+                            'required' => $attribute->isRequired(),
+                        ])
+                    );
+                }
+
                 $form->remove('businessUnit');
                 $form->add(
                     'businessUnit',

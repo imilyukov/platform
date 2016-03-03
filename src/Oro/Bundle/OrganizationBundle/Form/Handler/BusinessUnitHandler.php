@@ -41,9 +41,18 @@ class BusinessUnitHandler
      */
     public function process(BusinessUnit $entity)
     {
+        $model = $this->manager->getRepository('IMilyukovEavSchemaBundle:EavModel')->findOneBy([
+            'subjectClass' => \Bundle\CompanyBundle\Entity\Department::class
+        ]);
+
+        if ($model) {
+            $entity->setModel($model);
+        }
+
         $this->form->setData($entity);
 
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
+
             $this->form->submit($this->request);
 
             if ($this->form->isValid()) {
