@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\OrganizationBundle\Entity;
 
-use IMilyukov\EavSchemaBundle\Model\EavSubjectAttributeInterface;
+use IMilyukov\Bundle\EavSchemaBundle\Model\EavSubjectAttributeInterface;
 
 /**
  * Interface BusinessUnitAttributeInterface

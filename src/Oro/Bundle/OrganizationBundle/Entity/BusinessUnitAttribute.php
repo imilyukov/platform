@@ -2,9 +2,8 @@
 
 namespace Oro\Bundle\OrganizationBundle\Entity;
 
-use IMilyukov\EavSchemaBundle\Entity\EavSubjectAttribute;
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use IMilyukov\Bundle\EavSchemaBundle\Entity\EavSubjectAttribute;
 
 /**
  * Class DiscountAttribute
@@ -21,7 +20,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
-class BusinessUnitAttribute extends EavSubjectAttribute
+class BusinessUnitAttribute extends EavSubjectAttribute implements BusinessUnitAttributeInterface
 {
     /**
      * @var integer

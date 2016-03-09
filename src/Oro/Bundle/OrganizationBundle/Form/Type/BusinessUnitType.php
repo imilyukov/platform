@@ -2,7 +2,7 @@
 
 namespace Oro\Bundle\OrganizationBundle\Form\Type;
 
-use IMilyukov\EavSchemaBundle\Form\FormToTypeMapperInterface;
+use IMilyukov\Bundle\EavSchemaBundle\Form\FormToTypeMapperInterface;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

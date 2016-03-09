@@ -5,8 +5,8 @@ namespace Oro\Bundle\OrganizationBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use IMilyukov\EavSchemaBundle\Entity\EavSubject;
-use IMilyukov\EavSchemaBundle\Model\EavAttributeInterface;
+use IMilyukov\Bundle\EavSchemaBundle\Entity\EavSubject;
+use IMilyukov\Bundle\EavSchemaBundle\Model\EavAttributeInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\NotificationBundle\Entity\NotificationEmailInterface;
 use Oro\Bundle\UserBundle\Entity\User;
