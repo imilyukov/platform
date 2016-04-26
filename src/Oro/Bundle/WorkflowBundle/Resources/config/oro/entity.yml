@@ -1,0 +1,5 @@
+oro_entity:
+    entity_aliases:
+        Oro\Bundle\WorkflowBundle\Entity\WorkflowStep:
+            alias: oroworkflowstep
+            plural_alias: oroworkflowsteps
