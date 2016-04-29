@@ -5,6 +5,10 @@ namespace Oro\Bundle\OrganizationBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
+use MyDiscounts\PiwikBundle\Model\SiteAwareInterface;
+use MyDiscounts\PiwikBundle\Model\UserAwareInterface;
+use MyDiscounts\PiwikBundle\Module\SiteManager\Model\SiteInterface;
+use MyDiscounts\PiwikBundle\Module\UserManager\Model\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 use Oro\Bundle\UserBundle\Entity\User;
@@ -41,7 +45,9 @@ use Oro\Bundle\OrganizationBundle\Model\ExtendOrganization;
 class Organization extends ExtendOrganization implements
     OrganizationInterface,
     NotificationEmailInterface,
-    \Serializable
+    \Serializable,
+    SiteAwareInterface,
+    UserAwareInterface
 {
     /**
      * @var integer
@@ -144,6 +150,21 @@ class Organization extends ExtendOrganization implements
      * )
      */
     protected $enabled;
+
+    /**
+     * @var SiteInterface
+     *
+     * @ORM\OneToOne(targetEntity="Bundle\CompanyBundle\Entity\Piwik\PiwikSite", mappedBy="company")
+     */
+    protected $piwikSite;
+
+    /**
+     * @var UserInterface
+     *
+     * @ORM\OneToOne(targetEntity="Bundle\CompanyBundle\Entity\Piwik\PiwikUser", mappedBy="company")
+     */
+    protected $piwikUser;
+
 
     public function __construct()
     {
@@ -426,5 +447,37 @@ class Organization extends ExtendOrganization implements
     public function getUsers()
     {
         return $this->users;
+    }
+
+    /**
+     * @param SiteInterface $site
+     */
+    public function setPiwikSite(SiteInterface $site)
+    {
+        $this->piwikSite = $site;
+    }
+
+    /**
+     * @return SiteInterface
+     */
+    public function getPiwikSite()
+    {
+        return $this->piwikSite;
+    }
+
+    /**
+     * @param UserInterface $user
+     */
+    public function setPiwikUser(UserInterface $user)
+    {
+        $this->piwikUser = $user;
+    }
+
+    /**
+     * @return UserInterface
+     */
+    public function getPiwikUser()
+    {
+        return $this->piwikUser;
     }
 }
