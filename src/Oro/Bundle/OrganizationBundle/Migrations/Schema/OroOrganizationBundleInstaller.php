@@ -56,6 +56,8 @@ class OroOrganizationBundleInstaller implements Installation
             ['default' => null, 'notnull' => false, 'comment' => '(DC2Type:datetime)']
         );
         $table->addColumn('enabled', 'boolean', ['default' => '1']);
+        $table->addColumn('piwik_site_id', 'integer', ['notnull' => false]);
+        $table->addColumn('piwik_user_id', 'integer', ['notnull' => false]);
         $table->addUniqueIndex(['name'], 'uniq_bb42b65d5e237e06');
         $table->setPrimaryKey(['id']);
     }

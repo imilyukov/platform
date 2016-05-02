@@ -155,13 +155,15 @@ class Organization extends ExtendOrganization implements
      * @var SiteInterface
      *
      * @ORM\OneToOne(targetEntity="Application\MyDiscounts\PiwikBundle\Entity\CompanySite", mappedBy="company")
+     * @ORM\JoinColumn(name="piwik_site_id", referencedColumnName="id")
      */
     protected $piwikSite;
 
     /**
      * @var UserInterface
      *
-     * @ORM\OneToOne(targetEntity="Application\MyDiscounts\PiwikBundle\Entity\CompanyUser", mappedBy="company")
+     * @ORM\OneToMany(targetEntity="Application\MyDiscounts\PiwikBundle\Entity\CompanyUser", mappedBy="company")
+     * @ORM\JoinColumn(name="piwik_user_id", referencedColumnName="id")
      */
     protected $piwikUser;
 
@@ -172,6 +174,8 @@ class Organization extends ExtendOrganization implements
 
         $this->businessUnits = new ArrayCollection();
         $this->users         = new ArrayCollection();
+//        $this->piwikUsers = new ArrayCollection();
+//        $this->piwikSites = new ArrayCollection();
     }
 
 
