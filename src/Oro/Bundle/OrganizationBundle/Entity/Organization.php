@@ -154,14 +154,14 @@ class Organization extends ExtendOrganization implements
     /**
      * @var SiteInterface
      *
-     * @ORM\OneToOne(targetEntity="Bundle\CompanyBundle\Entity\Piwik\PiwikSite", mappedBy="company")
+     * @ORM\OneToOne(targetEntity="Application\MyDiscounts\PiwikBundle\Entity\CompanySite", mappedBy="company")
      */
     protected $piwikSite;
 
     /**
      * @var UserInterface
      *
-     * @ORM\OneToOne(targetEntity="Bundle\CompanyBundle\Entity\Piwik\PiwikUser", mappedBy="company")
+     * @ORM\OneToOne(targetEntity="Application\MyDiscounts\PiwikBundle\Entity\CompanyUser", mappedBy="company")
      */
     protected $piwikUser;
 
